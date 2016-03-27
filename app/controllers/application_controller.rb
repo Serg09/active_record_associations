@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
 
   private
 
+  rescue_from CanCan::AccessDenied do |exception|
+    flash [:danger] => exception.message
+    redirect_to root_url
+  end
+
   def current_user
     @current_user ||= User.find(session[:id]) if session[:id]
   rescue ActiveRecord::RecordNotFound
